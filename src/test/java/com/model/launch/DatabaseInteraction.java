@@ -10,11 +10,11 @@ import java.util.List;
 
 public class DatabaseInteraction {
 
-	private static final String JDBC_DRIVER = "org.postgresql.Driver";
-	private static final String DB_URL = "jdbc:postgresql://keng03-dev01-ins06-wfm76-dbs-01.int.dev.mykronos.com:5444/ppas_sdams1902";
+	private static final String JDBC_DRIVER = "org.sqlite.JDBC";
+	private static final String DB_URL = "jdbc:sqlite:C:\\Users\\dubey\\AppData\\Roaming\\DBeaverData\\workspace6\\.metadata\\sample-database-sqlite-1\\Chinook.db";
 	private static final String USER = "tkcsowner";
 	private static final String PASS = "tkcsowner";
-	private static final String QUERY = "select * from pc_u_fruit0_nonprd_01.person order by personid desc ;";
+	private static final String QUERY = "Select * from Artist a ;";
 
 	public List<String> runSelectQuery(String query) throws SQLException, ClassNotFoundException {
 		List<String> results = new ArrayList<>();
@@ -24,8 +24,8 @@ public class DatabaseInteraction {
 				ResultSet rs = stmt.executeQuery(query)) {
 
 			while (rs.next()) {
-				int id = rs.getInt("personid");
-				String propertyname = rs.getString("lastnm");
+				int id = rs.getInt("ArtistId");
+				String propertyname = rs.getString("Name");
 				results.add("ID: " + id + ", LastName: " + propertyname);
 			}
 		}
@@ -67,16 +67,16 @@ public class DatabaseInteraction {
 
 		// Example using getSingleValueFromDB
 		String singleValue = db.getSingleValueFromDB(
-				"SELECT firstnm FROM pc_u_fruit0_nonprd_01.person WHERE personid = (SELECT MAX(personid) FROM pc_u_fruit0_nonprd_01.person);");
+				"SELECT Name FROM Artist WHERE ArtistId = (SELECT MAX(ArtistID) FROM Artist);");
 		System.out.println("Single Value: " + singleValue);
 
 		// Example using executeUpdateQuery
 		db.executeUpdateQuery(
-				"UPDATE pc_u_fruit0_nonprd_01.person SET firstnm = 'Shivam' WHERE personid = (SELECT MAX(personid) FROM pc_u_fruit0_nonprd_01.person);");
+				"UPDATE Artist SET Name = 'Shivam' WHERE ArtistID = (SELECT MAX(ArtistID) FROM Artist);");
 		System.out.println("Update query executed.");
 		
 		//Verify the update.
-        String updatedName = db.getSingleValueFromDB("SELECT firstnm FROM pc_u_fruit0_nonprd_01.person WHERE personid = (SELECT MAX(personid) FROM pc_u_fruit0_nonprd_01.person);");
+        String updatedName = db.getSingleValueFromDB("SELECT Name FROM Artist WHERE ArtistId = (SELECT MAX(ArtistID) FROM Artist);");
         System.out.println("Updated Name: " + updatedName);
 
 	}
